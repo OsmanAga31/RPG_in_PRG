@@ -1,0 +1,53 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Osman\\srh\\2.Halbjahr\\PRG\\Unity\\Projects\\PRG_01\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{03032009-2D2C-E022-34A5-65BD9449202C}|Assembly-CSharp.csproj|c:\\osman\\srh\\2.halbjahr\\prg\\unity\\projects\\prg_01\\assets\\scripts\\basecharactercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03032009-2D2C-E022-34A5-65BD9449202C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\basecharactercontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{03032009-2D2C-E022-34A5-65BD9449202C}|Assembly-CSharp.csproj|C:\\Osman\\srh\\2.Halbjahr\\PRG\\Unity\\Projects\\PRG_01\\assets\\scripts\\mainmenuebuttonscript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{03032009-2D2C-E022-34A5-65BD9449202C}|Assembly-CSharp.csproj|solutionrelative:assets\\scripts\\mainmenuebuttonscript.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "BaseCharacterController.cs",
+              "DocumentMoniker": "C:\\Osman\\srh\\2.Halbjahr\\PRG\\Unity\\Projects\\PRG_01\\Assets\\Scripts\\BaseCharacterController.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\BaseCharacterController.cs",
+              "ToolTip": "C:\\Osman\\srh\\2.Halbjahr\\PRG\\Unity\\Projects\\PRG_01\\Assets\\Scripts\\BaseCharacterController.cs",
+              "RelativeToolTip": "Assets\\Scripts\\BaseCharacterController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-08T09:36:44.188Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "MainMenueButtonScript.cs",
+              "DocumentMoniker": "C:\\Osman\\srh\\2.Halbjahr\\PRG\\Unity\\Projects\\PRG_01\\Assets\\Scripts\\MainMenueButtonScript.cs",
+              "RelativeDocumentMoniker": "Assets\\Scripts\\MainMenueButtonScript.cs",
+              "ToolTip": "C:\\Osman\\srh\\2.Halbjahr\\PRG\\Unity\\Projects\\PRG_01\\Assets\\Scripts\\MainMenueButtonScript.cs",
+              "RelativeToolTip": "Assets\\Scripts\\MainMenueButtonScript.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-08T08:59:25.48Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
