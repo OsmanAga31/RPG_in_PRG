@@ -41,6 +41,10 @@ public class BaseCharacterController : MonoBehaviour
         {
             isSlowed = true;
         }
+        if(col.gameObject.CompareTag("HighGrass"))
+        {
+            Debug.Log("In High Grass");
+        }
     }
 
     private void OnTriggerExit2D(Collider2D col)
@@ -48,6 +52,10 @@ public class BaseCharacterController : MonoBehaviour
         if (col.gameObject.CompareTag("Swamp"))
         {
             isSlowed = false;
+        }
+        if (col.gameObject.CompareTag("HighGrass"))
+        {
+            Debug.Log("Out of High Grass");
         }
     }
 }
