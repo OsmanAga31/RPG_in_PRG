@@ -1,21 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static UnityEngine.InputSystem.InputAction;
-using UnityEngine.SceneManagement;
 using UnityEngine.Tilemaps;
+using static UnityEngine.InputSystem.InputAction;
 
+//BaseCharacter is the base of a character
 public class BaseCharacterController : MonoBehaviour
 {
     private Vector2 movementInput;
-    [SerializeField] float movementSpeed;
-    [Range(0,1)][SerializeField] float slowedFactor;
+    [SerializeField] private float movementSpeed;
+    [Range(0,1)][SerializeField] private float slowedFactor;
     private bool isSlowed;
-    private bool isPlayerInBattle;
+    private bool isPlayerPaused;
     private Vector3Int currentPosition;
     private Vector3Int lastEncounterPosition;
-
-    [SerializeField] private string townSceneName;
 
     public Tilemap tilemap
     {
@@ -30,11 +28,11 @@ public class BaseCharacterController : MonoBehaviour
     private void Start()
     {
         isSlowed = false;
-        isPlayerInBattle = false;
+        isPlayerPaused = false;
     }
 
     /// <summary>
-    /// Movement is called by the input system when the player moves the joystick or presses the arrow keys.
+    /// Movement is called by the input system when the player moves the joystick or presses the arrow keys
     /// </summary>
     /// <param name="ctx">Context provided by Unity Input</param>
     public void Movement(CallbackContext ctx)
@@ -46,21 +44,13 @@ public class BaseCharacterController : MonoBehaviour
     //This is now a FIXEDupdate
     private void FixedUpdate()
     {
-        if (isPlayerInBattle) return;
-        //var actualMovementSpeed = isSlowed ? movementSpeed * slowedFactor : movementSpeed;
+        if (isPlayerPaused) return;
+        //var actuallMovementSpeed = isSlowed ? movementSpeed * slowedFactor : movementSpeed;
         var actualMovementSpeed = movementSpeed;
         if(isSlowed) actualMovementSpeed *= slowedFactor;
 
         transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * actualMovementSpeed);
         currentPosition = tilemap.WorldToCell(transform.position);
-    }
-
-    private void OnTriggerEnter2D(Collider2D col)
-    {
-        if (col.gameObject.CompareTag("EnterTown"))
-        {
-            SceneManager.LoadScene(townSceneName);
-        }
     }
 
     private void OnTriggerStay2D(Collider2D col)
@@ -69,17 +59,15 @@ public class BaseCharacterController : MonoBehaviour
         {
             isSlowed = true;
         }
-        else if (col.gameObject.CompareTag("FightEncounter"))
+        else if(col.gameObject.CompareTag("FightEncounter"))
         {
             if(currentPosition != lastEncounterPosition)
             {
                 lastEncounterPosition = currentPosition;
-                isPlayerInBattle = FightManager.Instance.CheckForEncounter();
+                isPlayerPaused = FightManager.Instance.CheckForEncounter();
             }
         }
-
     }
-
     private void OnTriggerExit2D(Collider2D col)
     {
         if (col.gameObject.CompareTag("Swamp"))
@@ -88,9 +76,8 @@ public class BaseCharacterController : MonoBehaviour
         }
     }
 
-    private void CheckForEncounter()
+    private void CheckForEncouter()
     {
         FightManager.Instance.CheckForEncounter();
     }
-
 }

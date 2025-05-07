@@ -5,15 +5,11 @@ using UnityEngine;
 public class CharacterStatsManager : MonoBehaviour
 {
     public static CharacterStatsManager Instance { get; private set; }
-    [SerializeField] private int ExperiencePoints;
-    [SerializeField] private int Level;
-    [SerializeField] private int Health;
-    [SerializeField] private int MaxHealth;
+    private Dictionary<string, BattleCharacter> characters;
     private Dictionary<string, bool> equipment;
     private Dictionary<string, int> items;
 
 
-    // Start is called before the first frame update
     void Start()
     {
         if (Instance == null)
@@ -26,17 +22,13 @@ public class CharacterStatsManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        {
-            Destroy(gameObject);
-        }
     }
 
     private void Load()
     {
-        ExperiencePoints = 0;
-        Level = 1;
-        Health = 100;
-        MaxHealth = 100;
+        characters = new Dictionary<string, BattleCharacter>();      
+        characters.Add("Warrior", new Warrior());
+        characters.Add("Mage", new Mage());
 
         equipment = new Dictionary<string, bool>();
         items = new Dictionary<string, int>();
