@@ -1,24 +1,23 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class FightManager : MonoBehaviour
 {
     public static FightManager Instance { get; private set; }
-    [Range(0, 100), SerializeField] private int chanceToEncounter;
+    [Range(0,100),SerializeField] private int chanceToEncounter;
     [SerializeField] GameObject fightCanvas;
     private bool isFightActive;
-    private bool transition = false;
-    private Dictionary<string, BattleCharacter> characters;
+    private BaseCharacterController characterController;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        if (Instance == null)
+        if(Instance == null)
         {
             Instance = this;
         }
-        else if (Instance != this)
+        else if(Instance != this)
         {
             Destroy(gameObject);
         }
@@ -26,8 +25,9 @@ public class FightManager : MonoBehaviour
         isFightActive = false;
     }
 
-    public bool CheckForEncounter()
+    public bool CheckForEncounter(BaseCharacterController characterController)
     {
+        this.characterController = characterController;
         if (Random.Range(0, 100) < chanceToEncounter)
         {
             StartFight();
@@ -37,13 +37,14 @@ public class FightManager : MonoBehaviour
 
     private void StartFight()
     {
-        fightCanvas.SetActive(true);
-        isFightActive = true;
         StartCoroutine(FightCoroutine());
     }
 
     private IEnumerator FightCoroutine()
     {
+        isFightActive = true;
+        fightCanvas.SetActive(isFightActive);
+        
         //Load Characters
         LoadCharacter();
         //Load Random Enemies
@@ -71,16 +72,14 @@ public class FightManager : MonoBehaviour
 
         //End Fight and gain XP and Gold
         //Level UP?
+        fightCanvas.SetActive(isFightActive);
+        characterController.PausePlayer(isFightActive);
     }
     private void LoadCharacter()
     {
-        characters = new Dictionary<string, BattleCharacter>();
-        characters.Add("Warrior", new Warrior());
-        characters.Add("Mage", new Mage());
-
-        characters["Warrior"].LoadPlayerPrefab();
-        characters["Mage"].LoadPlayerPrefab();
-
-        
+        foreach (var character in CharacterStatsManager.Instance.characters)
+        {
+            character.Value.LoadPlayerPrefab(character.Key);
+        }
     }
 }
