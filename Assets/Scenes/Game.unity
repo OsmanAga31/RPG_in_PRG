@@ -159317,6 +159317,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1529257450}
     m_Modifications:
+    - target: {fileID: 2923531506341660189, guid: e2e6b493473c1b44db5be3b3c1761af8,
+        type: 3}
+      propertyPath: m_text
+      value: Ko-kuss-Nuss
+      objectReference: {fileID: 0}
+    - target: {fileID: 2923531506341660189, guid: e2e6b493473c1b44db5be3b3c1761af8,
+        type: 3}
+      propertyPath: m_TextStyleHashCode
+      value: -1183493901
+      objectReference: {fileID: 0}
     - target: {fileID: 4010289185551574724, guid: e2e6b493473c1b44db5be3b3c1761af8,
         type: 3}
       propertyPath: m_Name
