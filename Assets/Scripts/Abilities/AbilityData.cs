@@ -18,16 +18,16 @@ public enum AbilityTargetType
     MultiTarget,
 }
 
-public enum AbilityType
+public enum  AbilityType
 {
     incremental,
     decremental,
 }
 
+
 public enum AbilityStatType
 {
     health,
-    maxHealth,
     attack,
     defense,
     revival,

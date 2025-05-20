@@ -5,8 +5,6 @@ TagManager:
   serializedVersion: 2
   tags:
   - Swamp
-  - HighGrass
-  - EnterTown
   - FightEncounter
   layers:
   - Default
@@ -46,11 +44,11 @@ TagManager:
     uniqueID: 0
     locked: 0
   - name: Background
-    uniqueID: 3991935461
+    uniqueID: 2279971337
     locked: 0
   - name: Player
-    uniqueID: 4041949475
+    uniqueID: 3486886425
     locked: 0
   - name: Foreground
-    uniqueID: 356770073
+    uniqueID: 295919111
     locked: 0

@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 69bdca681fd0f364bb748355f26e847a, type: 3}
+  m_Script: {fileID: 11500000, guid: 711e1ed52e8c79246ae602b794cd2133, type: 3}
   m_Name: Heal
   m_EditorClassIdentifier: 
   abilityName: Blessing

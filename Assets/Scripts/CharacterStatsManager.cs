@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,9 @@ using UnityEngine;
 public class CharacterStatsManager : MonoBehaviour
 {
     public static CharacterStatsManager Instance { get; private set; }
-    public Dictionary<string, BattleCharacter> characters { get; private set; }
+    public List<BattleEntityData> characterData;
+    private Dictionary<string, int> characterExp;
+    private Dictionary<string, Health> characterHP;
     public Dictionary<string, bool> equipment { get; private set; }
     public Dictionary<string, int> items { get; private set; }
 
@@ -26,14 +29,47 @@ public class CharacterStatsManager : MonoBehaviour
 
     private void Load()
     {
-        characters = new Dictionary<string, BattleCharacter>
+        characterExp = new Dictionary<string, int>();
+        characterHP = new Dictionary<string, Health>();
+
+        foreach (var item in characterData)
         {
-            { "Xena", new Warrior() },
-            { "Mighty Mole", new Mage() },
-            { "Peter Pan", new Archer() }
-        };      
+            characterExp.Add(item.entityName, 0);
+            characterHP.Add(item.entityName, new Health (item.baseMaxHealth, item.baseMaxHealth));
+        }
 
         equipment = new Dictionary<string, bool>();
         items = new Dictionary<string, int>();
     }
+
+    public int GetPlayerExp(string playerName)
+    {
+        if (characterExp.ContainsKey(playerName))
+        {
+            return characterExp[playerName];
+        }
+        return 0;
+
+    }
+
+    public Health GetPlayerHP(string playerName)
+    {
+        if (characterHP.ContainsKey(playerName))
+        {
+            return characterHP[playerName];
+        }
+        return new Health(0, 0);
+    }
+}
+
+[Serializable]
+public struct Health
+{
+    public int health;
+    public int maxHealth;
+    public Health(int health, int maxHealth)
+    {
+        this.health = health;
+        this.maxHealth = maxHealth;
+    }   
 }
