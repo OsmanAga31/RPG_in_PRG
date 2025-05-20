@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69bdca681fd0f364bb748355f26e847a, type: 3}
   m_Name: Heal
   m_EditorClassIdentifier: 
-  abilityName: 
+  abilityName: Blessing
   target: 0
   type: 0
   stat: 0
+  abilityTime: 0

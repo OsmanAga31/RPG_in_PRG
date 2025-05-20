@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69bdca681fd0f364bb748355f26e847a, type: 3}
   m_Name: Poison
   m_EditorClassIdentifier: 
-  abilityName: 
-  type: 0
+  abilityName: Poison Mist over 9000
+  target: 0
+  type: 1
   stat: 0
+  abilityTime: 5
