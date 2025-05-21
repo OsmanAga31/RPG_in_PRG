@@ -76,15 +76,16 @@ public class BattleCharacter: MonoBehaviour
     //public virtual void UseAbility(BattleEnemy target, string abilityName) { }
     //public virtual void UseItem(string itemName) { }
     //public virtual void Heal(int healAmount) { }
-    //public virtual bool LevelUp() {
-    //    if(ExperiencePoints > 100 * Level)
-    //    {
-    //        ExperiencePoints -= 100 * Level; 
-    //        Level++;
-    //        return true;
-    //    }
-    //    return false;
-    //}
+    public virtual bool LevelUp()
+    {
+        if (ExperiencePoints > 100 * Level)
+        {
+            ExperiencePoints -= 100 * Level;
+            Level++;
+            return true;
+        }
+        return false;
+    }
 
     //public virtual void AddExperiencePoints(int exp)
     //{
