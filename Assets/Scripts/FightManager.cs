@@ -29,6 +29,12 @@ public class FightManager : MonoBehaviour
     private List<BattleCharacter> spawnedEnemies;
     private List<BattleCharacter> spawnedCharacters;
 
+    // Buttons for the fight UI.
+    [SerializeField] Button attackButton;
+    [SerializeField] Button skillButton;
+    [SerializeField] Button itemButton;
+    [SerializeField] Button fleeButton;
+
     // Called when the script is initialized. Ensures the Singleton pattern is enforced.
     void Start()
     {
@@ -190,4 +196,57 @@ public class FightManager : MonoBehaviour
         fightMusic.clip = FindObjectOfType<SceneFightDataHolder>().GetBattleMusic();
         fightMusic.Play();
     }
+
+    // Called when the player presses the attack button.
+    public void OnAttackButtonClicked()
+    {
+        // Add logic here for when the attack button is clicked.
+        Debug.Log("Player attacks!");
+
+        // Reduce the health of a random enemy for demonstration purposes.
+        if (spawnedEnemies.Count > 0)
+        {
+            int randomEnemyIndex = Random.Range(0, spawnedEnemies.Count);
+            BattleCharacter enemy = spawnedEnemies[randomEnemyIndex];
+            enemy.TakeDamage(10); // Assuming 10 damage for demonstration
+            Debug.Log($"Enemy health: {enemy.health.health}");
+        }
+        RemoveDefeatedEnemies();
+    }
+
+    // Called when the player presses the skill button.
+    public void OnSkillButtonClicked()
+    {
+        // Add logic here for when the skill button is clicked.
+        Debug.Log("Player uses a skill!");
+    }
+
+    // Called when the player presses the item button.
+    public void OnItemButtonClicked()
+    {
+        // Add logic here for when the item button is clicked.
+        Debug.Log("Player uses an item!");
+    }
+
+    // Called when the player presses the flee button.
+    public void OnFleeButtonClicked()
+    {
+        // Add logic here for when the flee button is clicked.
+        Debug.Log("Player tries to flee!");
+        isFightActive = false; // End the fight
+    }
+
+    public void RemoveDefeatedEnemies()
+    {
+        for (int i = spawnedEnemies.Count - 1; i >= 0; i--) // Rückwärts iterieren, um sicher zu entfernen
+        {
+            Health enemyHealth = spawnedEnemies[i].health;
+            if (enemyHealth.health <= 0)
+            {
+                Destroy(spawnedEnemies[i]); // Entfernt das GameObject aus der Szene
+                spawnedEnemies.RemoveAt(i); // Entfernt den Gegner aus der Liste
+            }
+        }
+    }
+
 }

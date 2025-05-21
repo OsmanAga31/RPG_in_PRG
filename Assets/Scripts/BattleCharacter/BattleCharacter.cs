@@ -92,4 +92,16 @@ public class BattleCharacter: MonoBehaviour
     //    ExperiencePoints += exp;
     //    LevelUp();
     //}
+
+    public virtual void TakeDamage(int damage)
+    {
+        Health newHealth = new Health(this.health.health - damage, this.health.maxHealth);
+        if (newHealth.health <= 0)
+        {
+            newHealth.health = 0;
+            isCharacterDeath = true;
+        }
+        SetHP(newHealth);
+        SetVisuals();
+    }
 }
