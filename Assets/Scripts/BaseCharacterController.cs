@@ -2,19 +2,21 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 using static UnityEngine.InputSystem.InputAction;
+using UnityEngine.SceneManagement;
 
 //BaseCharacter is the base of a character
 public class BaseCharacterController : MonoBehaviour
 {
     private Vector2 movementInput;
     [SerializeField] private float movementSpeed;
-    [Range(0,1)][SerializeField] private float slowedFactor;
+    [Range(0, 1)][SerializeField] private float slowedFactor;
     private bool isSlowed;
     private bool isPlayerPaused;
     private Vector3Int currentPosition;
     private Vector3Int lastEncounterPosition;
     private CharacterAnimationManager cam;
     private PlayerInput playerInput;
+    private GameObject interacltable;
 
     /// <summary>
     /// returns the first found Tilemap in the scene (!!make sure all Tilemaps have the same Transform!!)
@@ -29,7 +31,7 @@ public class BaseCharacterController : MonoBehaviour
     }
     private Tilemap m_tilemap;
 
-    private void Start()
+    private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
         //Setting first values
@@ -60,7 +62,7 @@ public class BaseCharacterController : MonoBehaviour
 
         //Default movement Speed
         var actualMovementSpeed = movementSpeed;
-        if(isSlowed) actualMovementSpeed *= slowedFactor; //Multiply by slowedFactor if the player is in a swamp
+        if (isSlowed) actualMovementSpeed *= slowedFactor; //Multiply by slowedFactor if the player is in a swamp
 
         transform.Translate(new Vector3(movementInput.x, movementInput.y, 0) * Time.deltaTime * actualMovementSpeed); // transform + input * deltaTime;
         currentPosition = tilemap.WorldToCell(transform.position); //translates World position to tilemap-cell position
@@ -72,13 +74,13 @@ public class BaseCharacterController : MonoBehaviour
         {
             isSlowed = true;
         }
-        else if(col.gameObject.CompareTag("FightEncounter"))
+        else if (col.gameObject.CompareTag("FightEncounter"))
         {
-            if(currentPosition != lastEncounterPosition)
+            if (currentPosition != lastEncounterPosition)
             {
                 lastEncounterPosition = currentPosition;
                 // FightManager is a singleton that checks if the player is in an encounter, returning true or false for pausing player
-                PausePlayer(FightManager.Instance.CheckForEncounter(this)); 
+                PausePlayer(FightManager.Instance.CheckForEncounter(this));
             }
         }
     }
@@ -87,6 +89,24 @@ public class BaseCharacterController : MonoBehaviour
         if (col.gameObject.CompareTag("Swamp"))
         {
             isSlowed = false;
+        }
+    }
+
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        // Open chest with tag Chest and set it's animator value "Open" to true
+        if (col.gameObject.CompareTag("Chest"))
+        {
+            var chestAnimator = col.GetComponent<ChestManager>();
+            if (chestAnimator != null)
+            {
+                interacltable = col.gameObject; // Store the interactable chest
+            }
+        }
+        else if (col.gameObject.CompareTag("EnterChestRoom")) // Switch scene to the ChestRoom
+        {
+            SceneManager.LoadScene("ChestRoom");
         }
     }
 
@@ -113,7 +133,33 @@ public class BaseCharacterController : MonoBehaviour
         {
             // Subscribe to the movement input.
             movementAction.performed += Movement;
-            movementAction.canceled += Movement;           
+            movementAction.canceled += Movement;
         }
     }
+
+    private void OnEnable()
+    {
+        playerInput.actions["Interact"].performed += Interact; // Subscribe to the Interact action
+    }
+
+    private void OnDisable()
+    {
+        playerInput.actions["Interact"].performed -= Interact; // Unsubscribe from the Interact action
+    }
+
+    void Interact(InputAction.CallbackContext ctx)
+    {
+        if (ctx.performed)
+        {
+            // Check if the player is near a interactable object/chest and open/use it
+            if (interacltable != null && interacltable.CompareTag("Chest") && !interacltable.GetComponent<ChestManager>().GetIsOpen()) {
+                interacltable.GetComponent<ChestManager>().GetItemsAndRemove(); // Open the chest and get the Items
+                //Debug.Log("ret: " + interacltable.GetComponent<ChestManager>().GetIsOpen()); // for testing
+            }
+        }
+    }
+
 }
+
+
+

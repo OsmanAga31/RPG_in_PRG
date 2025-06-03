@@ -10,7 +10,7 @@ public class CharacterStatsManager : MonoBehaviour
     private Dictionary<string, int> characterExp;
     private Dictionary<string, Health> characterHP;
     public Dictionary<string, bool> equipment { get; private set; }
-    public Dictionary<BaseItem, int> items { get; private set; }
+    public Dictionary<SimpleBaseItem, int> items { get; private set; }
 
 
     void Start()
@@ -39,7 +39,7 @@ public class CharacterStatsManager : MonoBehaviour
         }
 
         equipment = new Dictionary<string, bool>();
-        items = new Dictionary<BaseItem, int>();
+        items = new Dictionary<SimpleBaseItem, int>();
     }
 
     public int GetPlayerExp(string playerName)
@@ -60,6 +60,21 @@ public class CharacterStatsManager : MonoBehaviour
         }
         return new Health(0, 0);
     }
+
+    public void AddItem(SimpleBaseItem item, int amount)
+    {
+        if (items.ContainsKey(item))
+        {
+            items[item] += amount;
+        }
+        else
+        {
+            items.Add(item, amount);
+        }
+        // Debug log the complete inventory
+        Debug.Log(items);
+    }
+
 }
 
 [Serializable]
