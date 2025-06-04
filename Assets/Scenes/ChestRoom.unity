@@ -428,8 +428,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 1742808049}
   inventoryItemsListUI: {fileID: 1532476996}
-  itemPrefab: {fileID: 0}
-  inventoryManager: {fileID: 0}
+  itemPrefab: {fileID: 8588760027088604241, guid: 9daaf105dea1e2949ab615e89ad8ffa5,
+    type: 3}
 --- !u!114 &139056852
 MonoBehaviour:
   m_ObjectHideFlags: 0
