@@ -16,7 +16,7 @@ public class BaseCharacterController : MonoBehaviour
     private Vector3Int lastEncounterPosition;
     private CharacterAnimationManager cam;
     private PlayerInput playerInput;
-    private GameObject interacltable;
+    private GameObject interactable;
 
     /// <summary>
     /// returns the first found Tilemap in the scene (!!make sure all Tilemaps have the same Transform!!)
@@ -95,16 +95,18 @@ public class BaseCharacterController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D col)
     {
+        Debug.Log("Trigger Enter with: " + col.gameObject.name); // for testing
         // Open chest with tag Chest and set it's animator value "Open" to true
         if (col.gameObject.CompareTag("Chest"))
         {
-            var chestAnimator = col.GetComponent<ChestManager>();
+            var chestAnimator = col.GetComponent<ChestManager2>();
             if (chestAnimator != null)
             {
-                interacltable = col.gameObject; // Store the interactable chest
+                interactable = col.gameObject; // Store the interactable chest
             }
+                Debug.Log("Interactable object found: " + interactable.name); // for testing
         }
-        else if (col.gameObject.CompareTag("EnterChestRoom")) // Switch scene to the ChestRoom
+        else if(col.gameObject.CompareTag("EnterChestRoom")) // Switch scene to the ChestRoom
         {
             SceneManager.LoadScene("ChestRoom");
         }
@@ -137,26 +139,9 @@ public class BaseCharacterController : MonoBehaviour
         }
     }
 
-    private void OnEnable()
+    public GameObject GetInteractable()
     {
-        playerInput.actions["Interact"].performed += Interact; // Subscribe to the Interact action
-    }
-
-    private void OnDisable()
-    {
-        playerInput.actions["Interact"].performed -= Interact; // Unsubscribe from the Interact action
-    }
-
-    void Interact(InputAction.CallbackContext ctx)
-    {
-        if (ctx.performed)
-        {
-            // Check if the player is near a interactable object/chest and open/use it
-            if (interacltable != null && interacltable.CompareTag("Chest") && !interacltable.GetComponent<ChestManager>().GetIsOpen()) {
-                interacltable.GetComponent<ChestManager>().GetItemsAndRemove(); // Open the chest and get the Items
-                //Debug.Log("ret: " + interacltable.GetComponent<ChestManager>().GetIsOpen()); // for testing
-            }
-        }
+        return interactable;
     }
 
 }

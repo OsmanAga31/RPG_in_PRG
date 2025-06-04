@@ -2,18 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ChestManager : MonoBehaviour
+public class ChestManager2 : MonoBehaviour
 {
     private Animator animator;
     [SerializeField] private bool isOpen;
     // a dictionary with items and their amount
-    public Dictionary<SimpleBaseItem, int> items { get; private set; }
+    [SerializeField] private int numberOfItems; // Number of items to add to the chest
+    public Dictionary<Items, int> items { get; private set; }
 
     // Start is called before the first frame update
     void Start()
     {
         animator = GetComponent<Animator>();
         LoadChestToJson();
+        SetIsOpen(GetIsOpen()); // Ensure the chest state is set correctly on start
+        fillChest(); // Fill the chest with items on start if not already open
+    }
+
+    private void fillChest() {
+        if (!GetIsOpen())
+        {
+            // Initialize the items dictionary of the chestManager with some randomly named items and random amounts by using the Item enum and than adding it to the dictionary with the AddItem method from the ChestManager.cs.
+            for (int i = 0; i<numberOfItems; i++)
+            {
+                // Generate a random item from the Item enum
+                Items randomItem = (Items)Random.Range(0, System.Enum.GetValues(typeof(Items)).Length);
+                int amount = Random.Range(1, 10); // Random amount between 1 and 10
+
+                // Add the item to the chest
+                AddItem(randomItem, amount);
+            }
+            ListItems(); // List items after adding for debugging purposes
+            Debug.Log("Chest filled with items.\n\n");
+        }
     }
 
     public void SetIsOpen(bool open)
@@ -21,10 +42,10 @@ public class ChestManager : MonoBehaviour
         animator.SetBool("Open", open);
         isOpen = open;
         //Debug.Log("Chest is now " + (isOpen ? "open" : "closed"));
-        //if (isOpen) // For testing
-        //{
-        //    ListItems(); // List items when the chest is opened
-        //}
+        if (isOpen) // For testing
+        {
+            ListItems(); // List items when the chest is opened
+        }
     }
 
     public bool GetIsOpen()
@@ -40,18 +61,18 @@ public class ChestManager : MonoBehaviour
             return;
         }
 
-        foreach (KeyValuePair<SimpleBaseItem, int> item in items)
+        foreach (KeyValuePair<Items, int> item in items)
         {
-            Debug.Log($"Item: {item.Key.itemName}, Amount: {item.Value}");
+            Debug.Log($"Item: {item.Key}, Amount: {item.Value}");
         }
         Debug.Log("Total items in chest: " + items.Count);  
     }
 
-    public void AddItem(SimpleBaseItem item, int amount)
+    public void AddItem(Items item, int amount)
     {
         if (items == null)
         {
-            items = new Dictionary<SimpleBaseItem, int>();
+            items = new Dictionary<Items, int>();
         }
 
         if (items.ContainsKey(item))
@@ -67,16 +88,16 @@ public class ChestManager : MonoBehaviour
     }
 
     // Remove every item and amount from chest and return it as dictionary to store it in another dictionary
-    public Dictionary<SimpleBaseItem, int> RemoveAllItems()
+    public Dictionary<Items, int> RemoveAllItems()
     {
-        Dictionary<SimpleBaseItem, int> removedItems = new Dictionary<SimpleBaseItem, int>(items);
+        Dictionary<Items, int> removedItems = new Dictionary<Items, int>(items);
         items.Clear();
         //Debug.Log("Removed all items from the chest.");
         SaveChestToJson(); // Save the chest after removing all items
         return removedItems;
     }
 
-    public Dictionary<SimpleBaseItem, int> GetItemsAndRemove()
+    public Dictionary<Items, int> GetItemsAndRemove()
     {
         SetIsOpen(true); // Open the chest before returning items
         return RemoveAllItems();
@@ -93,6 +114,8 @@ public class ChestManager : MonoBehaviour
         System.IO.File.WriteAllText(filePath, json);
         Debug.Log("Chest saved to " + filePath);
     }
+
+
     // load from json file with object name for the filename
     public void LoadChestToJson() {
         string filePath = Application.persistentDataPath + "/" + gameObject.name + "_chest.json";
