@@ -8,30 +8,6 @@ public class Interaction : MonoBehaviour
     [SerializeField] private GameObject player; // Reference to the player GameObject
     private GameObject interactable; // Reference to the interactable object
 
-    //private void OnEnable()
-    //{
-    //    playerInput.actions["Interact"].performed += Interact; // Subscribe to the Interact action
-    //}
-
-    //private void OnDisable()
-    //{
-    //    playerInput.actions["Interact"].performed -= Interact; // Unsubscribe from the Interact action
-    //}
-
-    //public void Interact()//InputAction.CallbackContext ctx)
-    //{
-    //    Debug.Log("Interact action performed"); // for testing
-    //    //if (ctx.performed)
-    //    //{
-    //    // Check if the player is near a interactable object/chest and open/use it
-    //    if (interactable != null && interactable.CompareTag("Chest") && !interactable.GetComponent<ChestManager>().GetIsOpen())
-    //    {
-    //    //interacltable.GetComponent<ChestManager>().GetItemsAndRemove(); // Open the chest and get the Items
-    //    Debug.Log("Chest is: " + interactable.GetComponent<ChestManager>().GetIsOpen()); // for testing
-    //    }
-    //    //}
-    //}
-
     public void Interact(CallbackContext ctx)
     {
         if (!ctx.started) return; // Only proceed if the action was performed

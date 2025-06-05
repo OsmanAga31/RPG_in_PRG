@@ -8,6 +8,7 @@ TagManager:
   - FightEncounter
   - EnterChestRoom
   - Chest
+  - ExitChestRoom
   layers:
   - Default
   - TransparentFX

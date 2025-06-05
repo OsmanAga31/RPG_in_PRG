@@ -9,6 +9,8 @@ public class BaseCharacterController : MonoBehaviour
 {
     private Vector2 movementInput;
     [SerializeField] private float movementSpeed;
+    [SerializeField] private GameObject ChestRoomSpawn;
+    [SerializeField] private GameObject ExitChestRoomSpawn;
     [Range(0, 1)][SerializeField] private float slowedFactor;
     private bool isSlowed;
     private bool isPlayerPaused;
@@ -108,7 +110,13 @@ public class BaseCharacterController : MonoBehaviour
         }
         else if(col.gameObject.CompareTag("EnterChestRoom")) // Switch scene to the ChestRoom
         {
+            gameObject.transform.position = ChestRoomSpawn.transform.position; // Set player position to the ChestRoomSpawn position
             SceneManager.LoadScene("ChestRoom");
+        }
+        else if(col.gameObject.CompareTag("ExitChestRoom")) // Switch scene to the ChestRoom
+        {
+            SceneManager.LoadScene("Game");
+            gameObject.transform.position = ExitChestRoomSpawn.transform.position; // Set player position to the ExitChestRoomSpawn position
         }
     }
 

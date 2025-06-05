@@ -7,7 +7,9 @@ public class ChestManager2 : MonoBehaviour
     private Animator animator;
     [SerializeField] private bool isOpen;
     // a dictionary with items and their amount
-    [SerializeField] private int numberOfItems; // Number of items to add to the chest
+    [SerializeField] private int maxNumberOfIndividualItems; // Number of items to add to the chest
+    [SerializeField] private int maxAmountOfItems; // Amount of items to add to the chest
+    private int numberOfItems; // Number of items to add to the chest, can be set in the inspector
     public Dictionary<Items, int> items { get; private set; }
 
     // Start is called before the first frame update
@@ -23,11 +25,12 @@ public class ChestManager2 : MonoBehaviour
         if (!GetIsOpen())
         {
             // Initialize the items dictionary of the chestManager with some randomly named items and random amounts by using the Item enum and than adding it to the dictionary with the AddItem method from the ChestManager.cs.
+            numberOfItems = Random.Range(1, maxNumberOfIndividualItems + 1); // Random number of items between 1 and maxNumberOfIndividualItems
             for (int i = 0; i<numberOfItems; i++)
             {
                 // Generate a random item from the Item enum
                 Items randomItem = (Items)Random.Range(0, System.Enum.GetValues(typeof(Items)).Length);
-                int amount = Random.Range(1, 10); // Random amount between 1 and 10
+                int amount = Random.Range(1, maxAmountOfItems); // Random amount between 1 and maxAmountOfItems
 
                 // Add the item to the chest
                 AddItem(randomItem, amount);

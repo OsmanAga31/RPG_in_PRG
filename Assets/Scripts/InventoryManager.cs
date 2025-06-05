@@ -8,12 +8,131 @@ public class SerializeableList
 {
     public List<Items> items;
     public List<int> amount;
+
+    public void Add(Items item, int amountToAdd)
+    {
+        if (items == null)
+        {
+            items = new List<Items>();
+            amount = new List<int>();
+        }
+        items.Add(item);
+        amount.Add(amountToAdd);
+    }
+
+    public void AddFromDictionary(Dictionary<Items, int> itemsToAdd)
+    {
+        if (itemsToAdd == null || itemsToAdd.Count == 0)
+        {
+            return;
+        }
+        if (items == null)
+        {
+            items = new List<Items>();
+            amount = new List<int>();
+        }
+        foreach (var item in itemsToAdd)
+        {
+            Add(item.Key, item.Value);
+        }
+    }
+
+    public Dictionary<Items, int> ToDictionary()
+    {
+        Dictionary<Items, int> dict = new Dictionary<Items, int>();
+        if (items != null && amount != null && items.Count == amount.Count)
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (dict.ContainsKey(items[i]))
+                {
+                    dict[items[i]] += amount[i];
+                }
+                else
+                {
+                    dict.Add(items[i], amount[i]);
+                }
+            }
+        }
+        return dict;
+    }
+
+    public void Clear()
+    {
+        if (items != null)
+        {
+            items.Clear();
+        }
+        if (amount != null)
+        {
+            amount.Clear();
+        }
+    }
+    public int Count
+    {
+        get
+        {
+            if (items == null || amount == null || items.Count != amount.Count)
+            {
+                return 0;
+            }
+            return items.Count;
+        }
+    }
+
+    public bool Contains(Items item)
+    {
+        return items != null && items.Contains(item);
+    }
+    public void Remove(Items item)
+    {
+        int index = items.IndexOf(item);
+        if (index >= 0 && index < items.Count)
+        {
+            items.RemoveAt(index);
+            amount.RemoveAt(index);
+        }
+    }
+    public void RemoveAt(int index)
+    {
+        if (index < 0 || index >= items.Count)
+        {
+            throw new IndexOutOfRangeException("Index out of range for items list.");
+        }
+        items.RemoveAt(index);
+        amount.RemoveAt(index);
+    }
+    public void ClearAll()
+    {
+        if (items != null)
+        {
+            items.Clear();
+        }
+        if (amount != null)
+        {
+            amount.Clear();
+        }
+    }
+    public override string ToString()
+    {
+        if (items == null || amount == null || items.Count != amount.Count)
+        {
+            return "Empty Inventory";
+        }
+        string result = "Inventory:\n";
+        for (int i = 0; i < items.Count; i++)
+        {
+            result += $"{items[i]}: {amount[i]}\n";
+        }
+        return result;
+    }
+
 }
 
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance { get; private set; }
-    public Dictionary<Items, int> items { get; private set; }
+    //public Dictionary<Items, int> items { get; private set; }
     private SerializeableList saveItemsAndAmount = new();
 
     /// <summary>
@@ -36,40 +155,22 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    // add item to the serializable list, if item already exists, increase the amount
     public void AddItem(Items item, int amount)
-    {
-        if (items == null)
-        {
-            items = new Dictionary<Items, int>();
-        }
-
-        if (items.ContainsKey(item))
-        {
-            items[item] += amount;
-        }
-        else
-        {
-            items.Add(item, amount);
-        }
+    {     
+        saveItemsAndAmount.Add(item, amount);
         SaveInventoryToJson();
     }
 
     public void AddItems(Dictionary<Items, int> newItems)
     {
-        if (items == null)
-        {
-            items = new Dictionary<Items, int>();
-        }
-        foreach (KeyValuePair<Items, int> item in newItems)
-        {
-            AddItem(item.Key, item.Value);
-        }
+        saveItemsAndAmount.AddFromDictionary(newItems);
+        SaveInventoryToJson();
     }
 
     // save to json file with object name for the filename
     public void SaveInventoryToJson()
     {
-        FillDictionaryToList(); // Fill the arrays from the dictionary before saving
         string json = JsonUtility.ToJson(saveItemsAndAmount, true);
         string filePath = Application.persistentDataPath + "/" + gameObject.name + "_inv.json";
         System.IO.File.WriteAllText(filePath, json);
@@ -84,10 +185,9 @@ public class InventoryManager : MonoBehaviour
         if (System.IO.File.Exists(filePath))
         {
             string json = System.IO.File.ReadAllText(filePath);
-            JsonUtility.FromJsonOverwrite(json, this);
+            JsonUtility.FromJsonOverwrite(json, saveItemsAndAmount);
             Debug.Log("Inventory loaded from " + filePath);
 
-            FillDictionaryItem(); // Fill the dictionary from the lists after loading
 
         }
         else
@@ -99,51 +199,20 @@ public class InventoryManager : MonoBehaviour
     public void ListItems()
     {
         LoadInventoryFromJson();
-        if (items == null || items.Count == 0)
+        if (saveItemsAndAmount != null && saveItemsAndAmount.Count > 0)
         {
-            Debug.Log("No items in the inventory.");
-            return;
+            Debug.Log(saveItemsAndAmount.ToString());
         }
-        foreach (KeyValuePair<Items, int> item in items)
+        else
         {
-            Debug.Log($"Item: {item.Key}, Amount: {item.Value}");
+            Debug.Log("Inventory is empty.");
         }
-        Debug.Log("Total items in inventory: " + items.Count + "\n\n\n");
     }
 
     public Dictionary<Items, int> GetInventory()
     {
         LoadInventoryFromJson();
-        if (items == null)
-        {
-            items = new Dictionary<Items, int>();
-        }
-        return items;
-    }
-
-    private void FillDictionaryToList()
-    {
-        saveItemsAndAmount.items = new List<Items>(items.Keys);
-        saveItemsAndAmount.amount = new List<int>(items.Values);
-    }
-
-    private void FillDictionaryItem()
-    {
-        items = new Dictionary<Items, int>();
-        if (saveItemsAndAmount.items != null && saveItemsAndAmount.amount != null)
-        {
-            for (int i = 0; i < saveItemsAndAmount.items.Count; i++)
-            {
-                if (items.ContainsKey(saveItemsAndAmount.items[i]))
-                {
-                    items[saveItemsAndAmount.items[i]] += saveItemsAndAmount.amount[i];
-                }
-                else
-                {
-                    items.Add(saveItemsAndAmount.items[i], saveItemsAndAmount.amount[i]);
-                }
-            }
-        }
+        return saveItemsAndAmount.ToDictionary();
     }
 
 }

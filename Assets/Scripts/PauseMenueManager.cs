@@ -4,12 +4,16 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
 using UnityEngine.UI;
+using System.IO;
+using UnityEngine.Windows;
+using UnityEngine.WSA;
 
 public class PauseMenueManager : MonoBehaviour
 {
     [SerializeField] private GameObject pauseMenuUI;
     [SerializeField] private GameObject inventoryItemsListUI;
     [SerializeField] private GameObject itemPrefab;
+    [SerializeField] private List<string> backgroundImage;
     private InventoryManager inventoryManager;
     private BaseCharacterController baseCC;
     private Dictionary<Items, int> inventoryItems = new Dictionary<Items, int>();
@@ -57,8 +61,16 @@ public class PauseMenueManager : MonoBehaviour
             if (itemObj != null)
             {
                 // child 0 is the background, child 1 is the item icon, child 2 is the item name, child 3 is the item amount
+                // get image from directory and set it to the item icon
+                itemObj.transform.GetChild(1).GetComponent<Image>().sprite = Resources.Load<Sprite>("invIcons/" + item.Key.ToString()); // Only learned with A.I. that the images must be in the Resources folder
+                // set background image with random background image from the list
+                if (backgroundImage.Count > 0)
+                {
+                    string randomBackground = backgroundImage[Random.Range(0, backgroundImage.Count)];
+                    itemObj.transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("invIconsBackground/" + randomBackground);
+                }
                 itemObj.transform.GetChild(2).GetComponent<TMP_Text>().SetText(item.Key.ToString());
-                itemObj.transform.GetChild(3).GetComponent<TMP_Text>().SetText(item.Value.ToString() + "x");
+                itemObj.transform.GetChild(4).GetComponent<TMP_Text>().SetText(item.Value.ToString());
             }
             else
             {
