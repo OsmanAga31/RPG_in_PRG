@@ -3,6 +3,8 @@ using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 using static UnityEngine.InputSystem.InputAction;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
+using Unity.VisualScripting;
 
 //BaseCharacter is the base of a character
 public class BaseCharacterController : MonoBehaviour
@@ -19,6 +21,9 @@ public class BaseCharacterController : MonoBehaviour
     private CharacterAnimationManager cam;
     private PlayerInput playerInput;
     private GameObject interactable;
+    [SerializeField] private AudioManager audioManager; // Reference to the AudioManager for playing sounds
+
+
 
     /// <summary>
     /// returns the first found Tilemap in the scene (!!make sure all Tilemaps have the same Transform!!)
@@ -41,7 +46,10 @@ public class BaseCharacterController : MonoBehaviour
         isPlayerPaused = false;
         cam = GetComponent<CharacterAnimationManager>();
         PausePlayer(false);
+
     }
+
+    
 
     /// <summary>
     /// Movement is called by the input system when the player moves the joystick or presses the arrow keys
@@ -112,11 +120,13 @@ public class BaseCharacterController : MonoBehaviour
         {
             gameObject.transform.position = ChestRoomSpawn.transform.position; // Set player position to the ChestRoomSpawn position
             SceneManager.LoadScene("ChestRoom");
+            audioManager.PlayDoorSound(); // Play door opening sound
         }
         else if(col.gameObject.CompareTag("ExitChestRoom")) // Switch scene to the ChestRoom
         {
             SceneManager.LoadScene("Game");
             gameObject.transform.position = ExitChestRoomSpawn.transform.position; // Set player position to the ExitChestRoomSpawn position
+            audioManager.PlayDoorSound(); // Play door closing sound
         }
     }
 

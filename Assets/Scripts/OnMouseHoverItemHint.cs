@@ -1,18 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using static UnityEditor.Progress;
 
-public class OnMouseHoverItemHint : MonoBehaviour
+public class OnMouseHoverItemHint : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
-    // Start is called before the first frame update
     void Start()
     {
-        
+        // Ensure the hint is initially inactive
+        gameObject.transform.GetChild(5).gameObject.SetActive(false);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        
+        //Debug.Log("Mouse entered: " + gameObject.name); // for testing
+        gameObject.transform.GetChild(5).gameObject.SetActive(true);
     }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        //Debug.Log("Mouse exited: " + gameObject.name); // for testing
+        gameObject.transform.GetChild(5).gameObject.SetActive(false);
+    }
+
 }
