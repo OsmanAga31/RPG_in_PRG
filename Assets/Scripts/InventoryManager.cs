@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 [Serializable]
-public class SerializeableList
+public class SerializeableList // This class is used to serialize a list of items and their amounts for saving/loading the inventory
 {
     public List<Items> items;
     public List<int> amount;
 
+    // Function to add an item and its amount to the list
     public void Add(Items item, int amountToAdd)
     {
         if (items == null)
@@ -20,6 +22,7 @@ public class SerializeableList
         amount.Add(amountToAdd);
     }
 
+    // Function to add items from a dictionary to the list
     public void AddFromDictionary(Dictionary<Items, int> itemsToAdd)
     {
         if (itemsToAdd == null || itemsToAdd.Count == 0)
@@ -37,6 +40,7 @@ public class SerializeableList
         }
     }
 
+    // Function to convert the list to a dictionary
     public Dictionary<Items, int> ToDictionary()
     {
         Dictionary<Items, int> dict = new Dictionary<Items, int>();
@@ -57,6 +61,7 @@ public class SerializeableList
         return dict;
     }
 
+    // Function to clear the lists
     public void Clear()
     {
         if (items != null)
@@ -68,6 +73,8 @@ public class SerializeableList
             amount.Clear();
         }
     }
+
+    // Property to get the count of items in the inventory
     public int Count
     {
         get
@@ -80,10 +87,13 @@ public class SerializeableList
         }
     }
 
+    // Function to check if the list contains a specific item
     public bool Contains(Items item)
     {
         return items != null && items.Contains(item);
     }
+
+    // Function to get the amount of a specific item
     public void Remove(Items item)
     {
         int index = items.IndexOf(item);
@@ -93,6 +103,8 @@ public class SerializeableList
             amount.RemoveAt(index);
         }
     }
+
+    // function to remove an item at a specific index
     public void RemoveAt(int index)
     {
         if (index < 0 || index >= items.Count)
@@ -102,6 +114,8 @@ public class SerializeableList
         items.RemoveAt(index);
         amount.RemoveAt(index);
     }
+
+    // function to clear all items and amounts
     public void ClearAll()
     {
         if (items != null)
@@ -113,6 +127,8 @@ public class SerializeableList
             amount.Clear();
         }
     }
+
+    // Override ToString to display the inventory contents
     public override string ToString()
     {
         if (items == null || amount == null || items.Count != amount.Count)
@@ -132,13 +148,7 @@ public class SerializeableList
 public class InventoryManager : MonoBehaviour
 {
     public static InventoryManager Instance { get; private set; }
-    //public Dictionary<Items, int> items { get; private set; }
-    private SerializeableList saveItemsAndAmount = new();
-
-    /// <summary>
-    /// /////////////////////////// remove the dictionary and use only the serializeable list ///////////////////////////
-    /// </summary>
-
+    private SerializeableList saveItemsAndAmount = new(); // This will hold the items and their amounts in a serializable list
 
     // Start is called before the first frame update
     void Start()
@@ -147,7 +157,7 @@ public class InventoryManager : MonoBehaviour
         {
             Instance = this;
 
-            LoadInventoryFromJson();
+            LoadInventoryFromJson(); // Load the inventory from the JSON file at the start
         }
         else if (Instance != this)
         {
@@ -155,13 +165,14 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    // add item to the serializable list, if item already exists, increase the amount
+    // add item to the serializable list, if item already exists, increase the amount and save the inventory to json
     public void AddItem(Items item, int amount)
     {     
         saveItemsAndAmount.Add(item, amount);
         SaveInventoryToJson();
     }
 
+    // add multiple items to the serializable list, if item already exists, increase the amount and save the inventory to json
     public void AddItems(Dictionary<Items, int> newItems)
     {
         saveItemsAndAmount.AddFromDictionary(newItems);
@@ -196,6 +207,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    // list all items in the inventory, if the inventory is empty, print a message
     public void ListItems()
     {
         LoadInventoryFromJson();
@@ -209,6 +221,7 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
+    // get the inventory as a dictionary of items and their amounts
     public Dictionary<Items, int> GetInventory()
     {
         LoadInventoryFromJson();

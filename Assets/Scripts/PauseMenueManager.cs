@@ -33,7 +33,6 @@ public class PauseMenueManager : MonoBehaviour
         // if the pause menu is active, clear the inventoryItemsList and refill it with the items prefab
         if (pauseMenuUI.activeSelf)
         {
-            ClearInventoryItemsList();
             FillInventoryItemsList();
         }
     }
@@ -48,6 +47,7 @@ public class PauseMenueManager : MonoBehaviour
 
     private void FillInventoryItemsList()
     {
+        // clear the inventory items list UI first and then get the inventory items from the inventory manager
         ClearInventoryItemsList();
         inventoryItems = inventoryManager.GetInventory();
 
@@ -60,17 +60,23 @@ public class PauseMenueManager : MonoBehaviour
             GameObject itemObj = Instantiate(itemPrefab, inventoryItemsListUI.transform);
             if (itemObj != null)
             {
-                // child 0 is the background, child 1 is the item icon, child 2 is the item name, child 3 is the item amount
-                // get image from directory and set it to the item icon
-                itemObj.transform.GetChild(1).GetComponent<Image>().sprite = Resources.Load<Sprite>("invIcons/" + item.Key.ToString()); // Only learned with A.I. that the images must be in the Resources folder
                 // set background image with random background image from the list
                 if (backgroundImage.Count > 0)
                 {
                     string randomBackground = backgroundImage[Random.Range(0, backgroundImage.Count)];
                     itemObj.transform.GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("invIconsBackground/" + randomBackground);
                 }
+
+                // set item icon
+                itemObj.transform.GetChild(1).GetComponent<Image>().sprite = Resources.Load<Sprite>("invIcons/" + item.Key.ToString()); // Only learned with A.I. that the images must be in the Resources folder
+
+                // set item name and amount
                 itemObj.transform.GetChild(2).GetComponent<TMP_Text>().SetText(item.Key.ToString());
                 itemObj.transform.GetChild(4).GetComponent<TMP_Text>().SetText(item.Value.ToString());
+
+                // set item description 
+                itemObj.transform.GetChild(5).GetChild(1).GetComponent<TMP_Text>().SetText($"Description of item \"{item.Key.ToString()}\" coming soon!");
+
             }
             else
             {

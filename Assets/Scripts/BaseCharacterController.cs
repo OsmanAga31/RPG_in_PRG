@@ -106,7 +106,8 @@ public class BaseCharacterController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D col)
     {
         Debug.Log("Trigger Enter with: " + col.gameObject.name); // for testing
-        // Open chest with tag Chest and set it's animator value "Open" to true
+
+        // Open chest with tag "Chest" and set it's animator value "Open" to true
         if (col.gameObject.CompareTag("Chest"))
         {
             var chestAnimator = col.GetComponent<ChestManager2>();
@@ -119,12 +120,12 @@ public class BaseCharacterController : MonoBehaviour
         else if(col.gameObject.CompareTag("EnterChestRoom")) // Switch scene to the ChestRoom
         {
             gameObject.transform.position = ChestRoomSpawn.transform.position; // Set player position to the ChestRoomSpawn position
-            SceneManager.LoadScene("ChestRoom");
+            SceneManager.LoadScene("ChestRoom"); // Load the ChestRoom scene
             audioManager.PlayDoorSound(); // Play door opening sound
         }
         else if(col.gameObject.CompareTag("ExitChestRoom")) // Switch scene to the ChestRoom
         {
-            SceneManager.LoadScene("Game");
+            SceneManager.LoadScene("Game"); // Load the Game scene
             gameObject.transform.position = ExitChestRoomSpawn.transform.position; // Set player position to the ExitChestRoomSpawn position
             audioManager.PlayDoorSound(); // Play door closing sound
         }
