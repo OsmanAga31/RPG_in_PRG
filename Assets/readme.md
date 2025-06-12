@@ -5,9 +5,10 @@
 - Chests have animation and sound when opening
 - When switching scenes, there is a door sound
 - There are different items available
-- Item descriptions appear when hovering over an item
+- Item descriptions appear when hovering over an item in inventory
 - The inventory is persistent and the status of chests is preserved
 - Scrolling in the inventory is more pleasant now
+- Item background in inventory is randomized
 
 ## Visual Changes
 

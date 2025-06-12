@@ -11,8 +11,8 @@ public class Interaction : MonoBehaviour
 
     public void Interact(CallbackContext ctx)
     {
-        if (!ctx.started) return; // Only proceed if the action was performed
-        Debug.Log($"Interact action {ctx.phase}"); // for testing
+        if (!ctx.performed) return; // Only proceed if the action was performed
+        //Debug.Log($"Interact action {ctx.phase}"); // for testing
 
         interactable = player.GetComponent<BaseCharacterController>().GetInteractable(); // Get the interactable object from the player controller
 
